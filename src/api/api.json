@@ -1,0 +1,8 @@
+{
+    "form":"http://localhost:8000/api/formbuilder/v1/build/form",
+    "formVersionedFetch":"http://localhost:8000/api/formbuilder/v1/build/version/form",
+    "latestForms":"http://localhost:8000/api/formbuilder/v1/build/latest/form/",
+    "submission":"http://localhost:8000/api/formbuilder/v1/data/submission",
+    "total_submissions":"http://localhost:8000/api/formbuilder/v1/data/total/submission",
+    "all_submissions":"http://localhost:8000/api/formbuilder/v1/data/all/submission"
+}
