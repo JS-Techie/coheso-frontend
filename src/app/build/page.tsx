@@ -10,7 +10,7 @@ import { useFormStore } from "@/stores/formStore";
 import { stat } from "fs";
 import { useState } from "react";
 
-export default function formbuilder() {
+export default function Formbuilder() {
   const params = useSearchParams();
   const status = params.get('status') === 'Edit' ? 'edit' : 'create'
   const savedForm = useFormStore(state => state.form)

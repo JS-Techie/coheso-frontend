@@ -1,14 +1,9 @@
-import Form from "@/components/Form";
-import { NextUIProvider } from "@nextui-org/react";
-import TableComponent from "@/components/TableComponent";
-import FormDocument from "@/components/FormDocumentPreview";
+import HomePage from "./home/page";
 
 export default function Home() {
   return ( 
       <div>
-        {/* <Form /> */}
-        {/* <CardNavigationMenu /> */}
-        <FormDocument preview={true}/>
+        <HomePage />
       </div>
   );
 }

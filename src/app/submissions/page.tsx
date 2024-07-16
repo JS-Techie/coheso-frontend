@@ -14,7 +14,7 @@ import { getAllSubmissionsForSpecificFormVersionId, deleteSubmission } from '@/a
 import { Submission } from '@/interfaces/interfaces.d';
 
 
-const submissions: React.FC = () => {
+const Submissions: React.FC = () => {
   const params = useSearchParams()
   const [specificSubmissions, setSpecificSubmissions] = useState<Submission[]>([]);
   const previewSubmission = useFormStore(state => state.previewSubmission);
@@ -126,4 +126,4 @@ const submissions: React.FC = () => {
       </div>
   );
 };
-export default submissions;
+export default Submissions;
