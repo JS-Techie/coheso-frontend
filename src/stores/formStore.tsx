@@ -1,4 +1,4 @@
-import create from 'zustand';
+import {create} from 'zustand';
 import { Form, Submission } from '@/interfaces/interfaces.d';
 
 interface FormState {

@@ -11,7 +11,7 @@ import { EditIcon } from '@/components/EditIcon';
 import FormSubmitIcon from '../../assets/icons/FormSubmit.ico'
 import SubmissionsIcon from '../../assets/icons/Submissions.ico'
 import VersionAllIcon from '../../assets/icons/versionAll.ico'
-import { getAllForms } from '@/api/form';
+import { getAllLatestForms } from '@/api/form';
 import { useFormStore } from '@/stores/formStore';
 import { Form } from '@/interfaces/interfaces.d';
 import { deleteForm } from '@/api/form';
@@ -41,7 +41,7 @@ const ViewAll: React.FC = () => {
   useEffect(() => {
     const fetchAllForms = async () => {
       try {
-        const getAllFormsResponse: ApiResponse = await getAllForms();
+        const getAllFormsResponse: ApiResponse = await getAllLatestForms();
         setAllForms(getAllFormsResponse);
       } catch (error) {
         console.error('Error fetching forms:', error);
