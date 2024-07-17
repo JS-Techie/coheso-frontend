@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextUIProvider, Spacer, Button, Divider } from "@nextui-org/react";
 import Link from 'next/link';
+import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 import "./globals.css";
+import LoadingPage from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +39,10 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
             </header>
             <Divider />
           <div className="container mx-auto p-6 mt-[4.5%]">
-            {children}  
+            <Suspense fallback={<LoadingPage/>}>
+              <Toaster position="bottom-right" />
+              {children}  
+            </Suspense>
           </div>
         </NextUIProvider>
       </body>

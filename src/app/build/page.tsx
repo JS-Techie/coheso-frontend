@@ -9,6 +9,7 @@ import { createForms, updateForm } from "@/api/form";
 import { useFormStore } from "@/stores/formStore";
 import { stat } from "fs";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Formbuilder() {
   const params = useSearchParams();
@@ -17,9 +18,21 @@ export default function Formbuilder() {
   const [ disableSubmitButton, setDisableSubmitButton ] = useState(true);
 
   const handleFormSubmit = async() => {
-    console.log("THE STATUS ::: ", status)
-    const submitFormResponse = status === 'edit' ? await updateForm(savedForm, savedForm.form_version_id) : await createForms([savedForm])
-    console.log(submitFormResponse);
+    if (
+      savedForm.fields.length === 0  ||
+      savedForm.form_description=== "" ||
+      savedForm.form_name=== "" ||
+      savedForm.form_owner=== "" ||
+      savedForm.form_version_id=== "" ||
+      savedForm.version=== ""
+    ) toast.error("Please Fill Out All The Fiels Properly and Have At Least One Custom Field")
+    else {
+      const submitFormResponse = status === 'edit' ? await updateForm(savedForm, savedForm.form_version_id) : await createForms([savedForm])
+      if (submitFormResponse && submitFormResponse.data){
+        status === 'edit' ? toast.success("Doccument Edited Successfully") : toast.success("Document Submiited Successfully");
+        setDisableSubmitButton(true);
+      }
+    }
   }
 
   const handleDisablingSubmitButton = (data: boolean) => {

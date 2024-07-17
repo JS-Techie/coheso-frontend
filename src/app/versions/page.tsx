@@ -7,11 +7,8 @@ import Link from 'next/link';
 import TableComponent from '@/components/TableComponent';
 import { EyeIcon } from '@/components/EyeIcon';
 import { DeleteIcon } from '@/components/DeleteIcon';
-import { EditIcon } from '@/components/EditIcon';
-import FormSubmitIcon from '../../assets/icons/FormSubmit.ico'
-import SubmissionsIcon from '../../assets/icons/Submissions.ico'
 import VersionIcon from '../../assets/icons/version.ico'
-import { getAllForms } from '@/api/form';
+import toast from 'react-hot-toast';
 import { useFormStore } from '@/stores/formStore';
 import { Form } from '@/interfaces/interfaces.d';
 import { getVersionedForms, deleteForm } from '@/api/form';
@@ -76,6 +73,7 @@ const VersionAll: React.FC = () => {
                                                               console.log("THE DELETE RESPONSE ::: ", deleteFormResponse);
                                                               setRefreshKey(prevState => prevState+1)
                                                               onClose();
+                                                              toast.error("Document Deleted Successfully");
                                                               }}>
                     Delete
                   </Button>

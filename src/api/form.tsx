@@ -1,6 +1,6 @@
 import { Api } from '@mui/icons-material'
 import ApiUrl from './api.json'
-import { headers } from 'next/headers'
+import toast from 'react-hot-toast'
 import { Form } from '@/interfaces/interfaces.d'
 
 export const getAllForms = async() => {
@@ -21,7 +21,7 @@ export const getAllForms = async() => {
         return allForms;
     }
     catch(error){
-        console.log("ERROR WHILE FETCHING ALL FORMS :: ", error)
+        toast.error("ERROR WHILE FETCHING ALL FORMS")
     }
 }
 
@@ -43,7 +43,7 @@ export const getAllLatestForms = async() => {
         return allForms;
     }
     catch(error){
-        console.log("ERROR WHILE FETCHING ALL FORMS :: ", error)
+        toast.error("ERROR WHILE FETCHING ALL FORMS")
     }
 }
 
@@ -66,7 +66,7 @@ export const getSpecificForm = async(formId: string) => {
             
     }
     catch(error){
-        console.log("ERROR WHILE FETCHING A FORM :: ", error)
+        toast.error("ERROR WHILE FETCHING A FORM")
     }
 }
 
@@ -89,7 +89,7 @@ export const getVersionedForms = async(form_id: string) => {
             
     }
     catch(error){
-        console.log("ERROR WHILE FETCHING VERSIONED FORMs :: ", error)
+        toast.error("ERROR WHILE FETCHING VERSIONED FORMs")
     }
 }
 
@@ -114,7 +114,7 @@ export const createForms = async(forms: Form[]) => {
             
     }
     catch(error){
-        console.log("ERROR WHILE CREATING A FORM :: ", error)
+        toast.error("ERROR WHILE CREATING A FORM")
     }
 }
 
@@ -139,7 +139,7 @@ export const updateForm = async(form: Form, formVersionId: string) => {
             
     }
     catch(error){
-        console.log("ERROR WHILE UPDATING A FORM :: ", error)
+        toast.error("ERROR WHILE UPDATING A FORM")
     }
 }
 
@@ -164,7 +164,7 @@ export const deleteForm = async(formVersionId: string) => {
             
     }
     catch(error){
-        console.log("ERROR WHILE DELETING A FORM :: ", error)
+        toast.error("ERROR WHILE DELETING A FORM")
     }
 }
 

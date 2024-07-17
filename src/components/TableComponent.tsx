@@ -22,7 +22,6 @@ interface Form {
 
 
 const TableComponent: React.FC<TableProps>= ({rows, columns, filterKeys}) => {
-  console.log("The Rows :::",rows)
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortKey, setSortKey] = useState<keyof Form | null>(null);

@@ -1,15 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Textarea, Button, Dropdown, DropdownMenu, DropdownItem, DropdownTrigger, Input, DatePicker, Checkbox } from "@nextui-org/react";
-
+import { useSearchParams } from 'next/navigation';
 import { Option } from '@/interfaces/interfaces.d';
-
-
-// interface Option {
-//     key: string;
-//     value: string;
-//   };
-
 
 interface CustomField {
   field_id: string;
@@ -31,11 +24,10 @@ interface CustomFieldProps {
 
 const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCustomFieldChange }) => {
   const [field, setField] = useState<CustomField>(fieldData);
-  const [editMode, setEditMode] = useState<boolean>(true);
+  const [editMode, setEditMode] = useState<boolean>(useSearchParams().get('status') == 'Edit' ? false : true);
   const [selectedFieldType, setSelectedFieldType] = useState<string>(field.field_type);
   const [options, setOptions] = useState<Option[]>(()=> field.field_type === 'single-select' || field.field_value === 'multi-file' ? JSON.parse(field.field_value) : []);
-  const [newKey, setNewKey] = useState('');
-  const [newValue, setNewValue] = useState('');
+  const [editOptionsMode, setEditOptions] = useState(false);
 
   const handleAddOptionClick = () => {
     setOptions([...options, { key: '', value: '' }]);
@@ -56,7 +48,7 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
   const handleSubmitOptionsClick = () => {
     const updatedField = { ...field, 'field_value': options };
     setField(updatedField)
-    console.log('Submitted options:', options);
+    setEditOptions(false)
   };
   
 
@@ -85,8 +77,8 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
   };
 
   return (
-    <Card className="w-full">
-      <CardBody>
+    <Card className="w-full }">
+      <CardBody className={`${!editMode ? 'bg-gray-300' : 'bg-white'}`}>
         <div className="grid grid-cols-12 gap-4 justify-between p-4">
           <div className="text-right col-span-3">
             Field ID:
@@ -105,7 +97,7 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
               size='sm' 
               value={field ? field.field_label : ''}
               onChange={(e) => handleFieldChange(e, 'field_label')}
-              disabled={!editMode}
+              isDisabled={!editMode}
               className={editMode ? 'bg-white' : 'bg-gray-200'}
             />
           </div>
@@ -182,7 +174,7 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
                         <input
                             type="text"
                             placeholder="Key"
-                            disabled={!editMode}
+                            disabled={!editMode || !editOptionsMode}
                             value={option.key}
                             onChange={(e) => handleOptionChange(index, 'key', e.target.value)}
                             className="border rounded p-2 w-1/2"
@@ -191,40 +183,51 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
                             type="text"
                             placeholder="Value"
                             value={option.value}
-                            disabled={!editMode}
+                            disabled={!editMode || !editOptionsMode}
                             onChange={(e) => handleOptionChange(index, 'value', e.target.value)}
                             className="border rounded p-2 w-1/2"
                         />
-                        <button
+                        <Button
                             className="bg-red-500 text-white px-4 py-2 rounded"
                             onClick={() => handleDeleteOptionClick(index)}
-                            disabled={!editMode}
+                            isDisabled={!editMode || !editOptionsMode}
                         >
                             Delete
-                        </button>
+                        </Button>
                         </div>
                     ))}
-                    <button
+                    <Button
                         className="bg-blue-500 text-white px-4 py-2 rounded"
                         onClick={handleAddOptionClick}
-                        disabled={!editMode}
+                        isDisabled={!editMode || !editOptionsMode}
                     >
                         Add Option
-                    </button>
-                    <button
-                        className="bg-green-500 text-white px-4 py-2 rounded mt-4"
-                        onClick={handleSubmitOptionsClick}
-                        disabled={!editMode}
-                    >
-                        Submit Options
-                    </button>
+                    </Button>
+                    {
+                      editOptionsMode ? 
+                      <Button
+                          className="bg-green-500 text-white px-4 py-2 rounded mt-4"
+                          onClick={handleSubmitOptionsClick}
+                          isDisabled={!editOptionsMode || options.length === 0}
+                      >
+                          Submit Options
+                      </Button>
+                      :
+                      <Button
+                        className="bg-blue-950 text-white px-4 py-2 rounded mt-4"
+                        onClick={()=> setEditOptions(true)}
+                        isDisabled={!editMode}
+                      >
+                          Edit Options
+                      </Button>
+                    }
                     </div>
                 </div>
                 )}
             </div>
         </div>
         <div className="flex justify-end mt-4">
-          <Button color={editMode ? "success" : "primary"} onClick={handleSubmit}>
+          <Button isDisabled={(selectedFieldType && (selectedFieldType === 'single-select' || selectedFieldType === 'multi-file')) ? editOptionsMode : (!selectedFieldType ? true : false)} color={editMode ? "success" : "primary"} onClick={handleSubmit}>
             {editMode ? 'Submit' : 'Edit'}
           </Button>
         </div>

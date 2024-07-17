@@ -1,5 +1,6 @@
 import ApiUrl from './api.json'
 import { Submission } from '@/interfaces/interfaces.d'
+import toast from 'react-hot-toast';
 
 export const getAllSubmissions = async () => {
     try {
@@ -16,7 +17,7 @@ export const getAllSubmissions = async () => {
         const allSubmissions = await allSubmissionsResponse.json();
         return allSubmissions;
     } catch (error) {
-        console.log("ERROR WHILE FETCHING ALL SUBMISSIONS :: ", error);
+        toast.error("ERROR WHILE FETCHING ALL SUBMISSIONS");
     }
 }
 
@@ -35,7 +36,7 @@ export const getSpecificSubmission = async (submissionId: string) => {
         const specificSubmission = await specificSubmissionResponse.json();
         return specificSubmission;
     } catch (error) {
-        console.log("ERROR WHILE FETCHING A SUBMISSION :: ", error);
+        toast.error("ERROR WHILE FETCHING A SUBMISSION");
     }
 }
 
@@ -54,7 +55,7 @@ export const getTotalSubmissions = async () => {
         const TotalSubmissions = await TotalSubmissionResponse.json();
         return TotalSubmissions;
     } catch (error) {
-        console.log("ERROR WHILE FETCHING TOTAL SUBMISSIONS :: ", error);
+        toast.error("ERROR WHILE FETCHING TOTAL SUBMISSIONS");
     }
 }
 
@@ -73,7 +74,7 @@ export const getAllSubmissionsForSpecificFormVersionId = async (form_version_id:
         const allSubmissions = await AllSubmissionResponse.json();
         return allSubmissions.data;
     } catch (error) {
-        console.log("ERROR WHILE FETCHING TOTAL SUBMISSIONS :: ", error);
+        toast.error("ERROR WHILE FETCHING TOTAL SUBMISSIONS");
     }
 }
 
@@ -94,7 +95,7 @@ export const createSubmission = async (submissionData: Submission) => {
         const createdSubmission = await createSubmissionResponse.json();
         return createdSubmission.data;
     } catch (error) {
-        console.log("ERROR WHILE CREATING A SUBMISSION :: ", error);
+        toast.error("ERROR WHILE CREATING A SUBMISSION");
     }
 }
 
@@ -114,7 +115,7 @@ export const updateSubmission = async (submissionData: Submission, submissionId:
         const updatedSubmission = await updateSubmissionResponse.json();
         return updatedSubmission.data;
     } catch (error) {
-        console.log("ERROR WHILE UPDATING A SUBMISSION :: ", error);
+        toast.error("ERROR WHILE UPDATING A SUBMISSION");
     }
 }
 
@@ -133,6 +134,6 @@ export const deleteSubmission = async (submissionId: string) => {
         const deletedSubmission = await deleteSubmissionResponse.json();
         return deletedSubmission;
     } catch (error) {
-        console.log("ERROR WHILE DELETING A SUBMISSION :: ", error);
+        toast.error("ERROR WHILE DELETING A SUBMISSION");
     }
 }

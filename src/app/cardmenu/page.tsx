@@ -14,7 +14,6 @@ const CardNavigationPage: React.FC = () => {
                 isPressable
                 radius="sm"
                 className="border-none w-full h-[400px] cursor-pointer"
-                onPress={() => console.log("CARD I IS PRESSED")}
                 >
                     <img
                         alt="first card"
@@ -32,7 +31,6 @@ const CardNavigationPage: React.FC = () => {
                 isPressable
                 radius="sm"
                 className="border-none w-full h-[400px] cursor-pointer"
-                onPress={()=> console.log("THIS IS THE ONCLICK SECOND CARD")}
                 >
                     <img
                         alt="second card"

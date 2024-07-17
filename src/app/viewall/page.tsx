@@ -11,6 +11,7 @@ import { EditIcon } from '@/components/EditIcon';
 import FormSubmitIcon from '../../assets/icons/FormSubmit.ico'
 import SubmissionsIcon from '../../assets/icons/Submissions.ico'
 import VersionAllIcon from '../../assets/icons/versionAll.ico'
+import toast from 'react-hot-toast';
 import { getAllForms } from '@/api/form';
 import { getTotalSubmissions } from '@/api/submission';
 import { useFormStore } from '@/stores/formStore';
@@ -89,6 +90,7 @@ const ViewAll: React.FC = () => {
                                                               console.log("THE DELETE RESPONSE ::: ", deleteFormResponse);
                                                               setRefreshKey(prevState => prevState+1)
                                                               onClose();
+                                                              toast.error("Document Deleted Successfully");
                                                               }}>
                     Delete
                   </Button>

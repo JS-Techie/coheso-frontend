@@ -12,6 +12,7 @@ import { DeleteIcon } from '@/components/DeleteIcon';
 import { EditIcon } from '@/components/EditIcon';
 import { getAllSubmissionsForSpecificFormVersionId, deleteSubmission } from '@/api/submission';
 import { Submission } from '@/interfaces/interfaces.d';
+import toast from 'react-hot-toast';
 
 
 const Submissions: React.FC = () => {
@@ -57,6 +58,7 @@ const Submissions: React.FC = () => {
                                                               console.log("THE DELETE RESPONSE ::: ", deleteFormResponse);
                                                               setRefreshKey(prevState => prevState+1)
                                                               onClose();
+                                                              toast.error("Document Deleted Successfully");
                                                               }}>
                     Delete
                   </Button>

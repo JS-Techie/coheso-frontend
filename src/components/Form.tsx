@@ -32,35 +32,8 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
   const pagePathName = usePathname();
   const searchParams = useSearchParams();
   const pageStatus = searchParams.get('status') === 'Edit' ? 'edit': searchParams.get('status') === 'versionadd'? 'version': 'create'; 
-  const savedForm = useFormStore(state => state.form)
-  const addForm = useFormStore((state: any) => state.addForm);
-  const previewForm = useFormStore((state: any) => state.previewForm)
-  const [formName, setFormName] = useState<string>('');
-  const [formDescription, setFormDescription] = useState<string>('');
-  const [formOwner, setFormOwner] = useState<string>('');
-  const [fields, setFields] = useState<CustomField[]>([])
-
-  const handleSaveForm = async () => {
-    const newForm = {
-      form_id: `form--${uuidv4()}`,
-      version: '1-initial-version',
-      form_version_id: `form--${uuidv4()}--1-initial-version`,
-      form_name: formName,
-      form_description: formDescription,
-      form_owner: formOwner,
-      created_on: new Date().toISOString(),
-      fields,
-    };
-    addForm(newForm);
-    await fetch('/api/forms', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newForm),
-    });
-  };
-
+  const savedForm = useFormStore(state => state.form);
+  const previewForm = useFormStore((state: any) => state.previewForm);
   const [customFieldComponent, setCustomFieldComponent] = useState<number[]>([]);
   const [formData, setFormData] = useState<Form>(()=> {
     if (pageStatus == 'create'){
@@ -123,9 +96,7 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
     }
   });
 
-  console.log(searchParams.get('edit'))
-  console.log(pageStatus)
-  console.log('formData ::::: ', formData)
+  console.log('FORM DATA ::::: ', formData)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Form) => {
     handleSubmitButton(true);
@@ -156,7 +127,7 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
     setCustomFieldComponent([...customFieldComponent, customFieldComponent.length]);  
     setFormData({
       ...formData,
-      customFields: [...formData.customFields, { field_id: `field--${uuidv4()}`, field_label: '', field_type: '', field_value: '', submitted: false, required: true }]
+      customFields: [...formData.customFields, { field_id: `field--${uuidv4()}`, field_label: '', field_type: '', field_value: '', submitted: false, required: false }]
     });
   };
 
@@ -179,7 +150,7 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
           field_type: eachCustomField.field_type,
           required: eachCustomField.required
         }
-        if (eachCustomField.field_type === 'single-select' || eachCustomField.field_type === 'multi-file') (fieldDataJson as any)['options'] = eachCustomField.field_value
+        if (eachCustomField.field_type === 'single-select' || eachCustomField.field_type === 'multi-file') (fieldDataJson as any)['options'] = JSON.parse(eachCustomField.field_value)
         else (fieldDataJson as any)['placeholder'] = eachCustomField.field_value
         fields.push(fieldDataJson)
       })
@@ -293,7 +264,18 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
       <CardFooter>
         <div className="flex justify-end items-center w-full p-2">
           <div className="space-x-2">
-            <Button>Clear</Button>
+            <Button onClick={()=>{setFormData({
+                      formId: `form--${uuidv4()}`,
+                      version: '',
+                      formVersionId: '',
+                      formName: '',
+                      formDescription: '',
+                      formOwner: '',
+                      createdOn: new Date().toString(),
+                      customFields: []
+                    }); 
+                    setCustomFieldComponent([]);
+                }}>Clear</Button>
             <Button onClick={handleStoreDataSubmit}>Preview {'>'}</Button>
           </div>
         </div>

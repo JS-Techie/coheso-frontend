@@ -6,6 +6,7 @@ import { useFormStore } from '@/stores/formStore';
 import { ReactEventHandler, useEffect, useState } from 'react';
 import { createSubmission, updateSubmission } from '@/api/submission';
 import { useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { Link } from '@nextui-org/react';
 
 const A4_WIDTH = '793.7px';
@@ -67,6 +68,8 @@ const FormDocument: React.FC<{preview: boolean}>= ({preview}) => {
   const handleFormSubmit = async() => {
     const submissionData = status === 'edit' ? await updateSubmission(submitForm, submitForm.submission_id) : await createSubmission(submitForm)
     console.log("success creation submit-",submissionData)
+    if (submissionData)
+      status === 'edit' ? toast.success("Document Edited Successfully") : toast.success("Docment Submitted Successfully")
     setPreviewKey(true)
     previewSubmission(submissionData) 
   }
