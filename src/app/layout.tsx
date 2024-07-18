@@ -22,7 +22,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
           <header className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md">
               <div className="grid grid-cols-12 gap-4 p-4 ">
                 <div className="col-span-4 ">
-                  <span className="text-3xl font-bold">FORMITECT</span>
+                  <span className="text-3xl font-extralight font-sans">FORMITECT</span>
                 </div>
                 <div className="col-span-4 col-start-8 text-right space-x-7 ">
                   <Link href="/home">

@@ -60,10 +60,10 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
           required: eachField.required,
           submitted: true
         }
-        if (eachField.field_type === 'single-select' || eachField.field_type === 'multi-file'){
+        if (eachField.field_type === 'single-select'){
           customFieldJson['field_value'] = JSON.stringify(eachField.options)
         }
-        else if (eachField.field_type == 'text' || eachField.field_type == 'long-text' || eachField.field_type == 'date'){
+        else if (eachField.field_type == 'text' || eachField.field_type == 'long-text' || eachField.field_type == 'date' || eachField.field_type === 'multi-file'){
           customFieldJson['field_value'] = eachField.placeholder || ''
         }
         customFieldComponentArray.push(index+1)
@@ -150,7 +150,7 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
           field_type: eachCustomField.field_type,
           required: eachCustomField.required
         }
-        if (eachCustomField.field_type === 'single-select' || eachCustomField.field_type === 'multi-file') (fieldDataJson as any)['options'] = JSON.parse(eachCustomField.field_value)
+        if (eachCustomField.field_type === 'single-select') (fieldDataJson as any)['options'] = JSON.parse(eachCustomField.field_value)
         else (fieldDataJson as any)['placeholder'] = eachCustomField.field_value
         fields.push(fieldDataJson)
       })
@@ -238,8 +238,9 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
           Custom Fields :
         </div>
         <div className="text-left col-span-8">
-          {customFieldComponent.map((field, index) => (
+          {customFieldComponent.map((_, index) => (
             <div key={index} className="flex items-center mb-2">
+              
               <CustomFields index={index} fieldData={formData.customFields[index]} handleCustomFieldChange={handleCustomFieldChange} />
               <Button color="warning" onClick={() => removeCustomComponent(index)} className="ml-2">
                 Delete

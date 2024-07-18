@@ -11,12 +11,12 @@ required: boolean;
 }
 
 export interface FieldWithString extends FieldBase {
-field_type: 'text' | 'long-text' | 'date';
+field_type: 'text' | 'long-text' | 'date' | 'multi-file';
 placeholder?: string;
 }
 
 export interface FieldWithOptions extends FieldBase {
-field_type: 'single-select' | 'multi-file';
+field_type: 'single-select';
 options?: Option[];
 }
 

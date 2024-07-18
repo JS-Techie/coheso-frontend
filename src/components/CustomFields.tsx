@@ -24,10 +24,26 @@ interface CustomFieldProps {
 
 const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCustomFieldChange }) => {
   const [field, setField] = useState<CustomField>(fieldData);
-  const [editMode, setEditMode] = useState<boolean>(useSearchParams().get('status') == 'Edit' ? false : true);
+  const [editMode, setEditMode] = useState<boolean>(useSearchParams().get('status') == 'Edit' ? false : !field.submitted);
   const [selectedFieldType, setSelectedFieldType] = useState<string>(field.field_type);
-  const [options, setOptions] = useState<Option[]>(()=> field.field_type === 'single-select' || field.field_value === 'multi-file' ? JSON.parse(field.field_value) : []);
+  const [options, setOptions] = useState<Option[]>(()=> field.field_type === 'single-select' ? JSON.parse(field.field_value) : []);
   const [editOptionsMode, setEditOptions] = useState(false);
+  const items = [
+    { key: "text", label: "TEXT" },
+    { key: "long-text", label: "LONG TEXT" },
+    { key: "date", label: "DATE" },
+    { key: "single-select", label: "SINGLE SELECT" },
+    { key: "multi-file", label: "MULTIPLE FILE" }
+  ];
+
+  useEffect(() => {
+    setField(fieldData);
+    setSelectedFieldType(fieldData.field_type)
+    setEditMode(!fieldData.submitted)
+    if (fieldData.field_type === 'single-select')
+      setOptions(JSON.parse(fieldData.field_value))
+  }, [fieldData]);
+
 
   const handleAddOptionClick = () => {
     setOptions([...options, { key: '', value: '' }]);
@@ -50,20 +66,6 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
     setField(updatedField)
     setEditOptions(false)
   };
-  
-
-  const items = [
-    { key: "text", label: "TEXT" },
-    { key: "long-text", label: "LONG TEXT" },
-    { key: "date", label: "DATE" },
-    { key: "single-select", label: "SINGLE SELECT" },
-    { key: "multi-file", label: "MULTIPLE FILE" }
-  ];
-
-
-  useEffect(() => {
-    setField(fieldData);
-  }, [fieldData]);
 
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement >, fieldKey: keyof CustomField) => {
     const updatedField = { ...field, [fieldKey]: e.target.value };
@@ -135,13 +137,13 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
         </div>
         <div className="grid grid-cols-12 gap-4 justify-end p-4">
             <div className="text-right col-span-3">
-                {selectedFieldType ? 'Field Value:':''}
+                {selectedFieldType ? selectedFieldType === 'single-select'?'Options:':'Placeholder Value:':''}
             </div>
             <div className="text-left col-span-8 col-start-4">
                 {selectedFieldType === "text" && (
                 <input 
                     type="text" 
-                    placeholder="Enter Field Value" 
+                    placeholder="Enter Placeholder Value" 
                     value={field && field.field_type === 'text' ? field.field_value : ''}
                     onChange={(e) => handleFieldChange(e, 'field_value')}
                     disabled={!editMode}
@@ -150,7 +152,7 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
                 )}
                 {selectedFieldType === "long-text" && (
                 <textarea 
-                    placeholder="Enter Field Value" 
+                    placeholder="Enter Placeholder Value" 
                     value={field && field.field_type === 'long-text' ? field.field_value : ''}
                     onChange={(e) => handleFieldChange(e, 'field_value')}
                     disabled={!editMode}
@@ -159,14 +161,25 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
                 )}
                 {selectedFieldType === "date" && (
                 <input 
-                    type="date" 
+                    type="text" 
+                    placeholder='Enter Placeholder Value'
                     value={field && field.field_type === 'date' ? field.field_value : ''}
                     onChange={(e) => handleFieldChange(e, 'field_value')}
                     disabled={!editMode}
                     className={editMode ? 'bg-white' : 'bg-gray-200'}
                 />
                 )}
-                {(selectedFieldType === "single-select" || selectedFieldType == "multi-file") && (
+                {selectedFieldType === "multi-file" && (
+                <input 
+                    type="text"
+                    placeholder='Enter Placeholder Value'
+                    value={field && field.field_type === 'multi-file' ? field.field_value : ''}
+                    onChange={(e) => handleFieldChange(e, 'field_value')}
+                    disabled={!editMode}
+                    className={editMode ? 'bg-white' : 'bg-gray-200'}
+                />
+                )}
+                {(selectedFieldType === "single-select") && (
                 <div>
                     <div className="flex flex-col gap-4 mt-4">
                     {options.map((option, index) => (
@@ -227,7 +240,7 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
             </div>
         </div>
         <div className="flex justify-end mt-4">
-          <Button isDisabled={(selectedFieldType && (selectedFieldType === 'single-select' || selectedFieldType === 'multi-file')) ? editOptionsMode : (!selectedFieldType ? true : false)} color={editMode ? "success" : "primary"} onClick={handleSubmit}>
+          <Button isDisabled={(selectedFieldType && selectedFieldType === 'single-select') ? editOptionsMode : (!selectedFieldType ? true : false)} color={editMode ? "success" : "primary"} onClick={handleSubmit}>
             {editMode ? 'Submit' : 'Edit'}
           </Button>
         </div>
