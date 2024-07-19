@@ -23,8 +23,9 @@ interface CustomFieldProps {
 
 
 const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCustomFieldChange }) => {
+  const params = useSearchParams();;
   const [field, setField] = useState<CustomField>(fieldData);
-  const [editMode, setEditMode] = useState<boolean>(useSearchParams().get('status') == 'Edit' ? false : !field.submitted);
+  const [editMode, setEditMode] = useState<boolean>(params.get('status') == 'Edit' ? false : !field.submitted);
   const [selectedFieldType, setSelectedFieldType] = useState<string>(field.field_type);
   const [options, setOptions] = useState<Option[]>(()=> field.field_type === 'single-select' ? JSON.parse(field.field_value) : []);
   const [editOptionsMode, setEditOptions] = useState(false);
@@ -40,8 +41,8 @@ const CustomFields: React.FC<CustomFieldProps> = ({ index, fieldData, handleCust
     setField(fieldData);
     setSelectedFieldType(fieldData.field_type)
     setEditMode(!fieldData.submitted)
-    if (fieldData.field_type === 'single-select')
-      setOptions(JSON.parse(fieldData.field_value))
+    if (fieldData.field_type === 'single-select' && params.get('status') == 'Edit')
+      setOptions(typeof fieldData.field_value === 'string' ? JSON.parse(fieldData.field_value) : fieldData.field_value)
   }, [fieldData]);
 
 

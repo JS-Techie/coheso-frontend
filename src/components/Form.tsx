@@ -29,7 +29,6 @@ interface Form {
 }
 
 const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({handleSubmitButton}) => {
-  const pagePathName = usePathname();
   const searchParams = useSearchParams();
   const pageStatus = searchParams.get('status') === 'Edit' ? 'edit': searchParams.get('status') === 'versionadd'? 'version': 'create'; 
   const savedForm = useFormStore(state => state.form);
@@ -150,7 +149,7 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
           field_type: eachCustomField.field_type,
           required: eachCustomField.required
         }
-        if (eachCustomField.field_type === 'single-select') (fieldDataJson as any)['options'] = JSON.parse(eachCustomField.field_value)
+        if (eachCustomField.field_type === 'single-select') (fieldDataJson as any)['options'] = typeof eachCustomField.field_value === 'string' ? JSON.parse(eachCustomField.field_value) : eachCustomField.field_value
         else (fieldDataJson as any)['placeholder'] = eachCustomField.field_value
         fields.push(fieldDataJson)
       })
@@ -193,7 +192,7 @@ const FormBuilder: React.FC<{handleSubmitButton : (data:boolean) => void}> = ({h
           Version :
         </div>
         <div className="text-left col-span-8">
-          <Textarea isRequired placeholder="Enter Version ID " minRows={1} size='sm' value={formData.version} onChange={(e) => handleChange(e, 'version')}/>
+          <Textarea isRequired isDisabled={pageStatus === 'edit' ? true : false} placeholder="Enter Version ID " minRows={1} size='sm' value={formData.version} onChange={(e) => handleChange(e, 'version')}/>
         </div>
       </div>
       <Divider />

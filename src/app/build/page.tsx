@@ -29,8 +29,16 @@ export default function Formbuilder() {
     else {
       const submitFormResponse = status === 'edit' ? await updateForm(savedForm, savedForm.form_version_id) : await createForms([savedForm])
       if (submitFormResponse && submitFormResponse.data){
-        status === 'edit' ? toast.success("Doccument Edited Successfully") : toast.success("Document Submiited Successfully");
-        setDisableSubmitButton(true);
+        if (submitFormResponse.data.length === 0 && submitFormResponse.devMessage === 'form version Id conflict')
+        {
+          toast.error (submitFormResponse.clientMessage);
+          setDisableSubmitButton(false);
+        }
+        else{
+          status === 'edit' ? toast.success("Doccument Edited Successfully") : toast.success("Document Submiited Successfully");
+          setDisableSubmitButton(true);
+        }
+        
       }
     }
   }

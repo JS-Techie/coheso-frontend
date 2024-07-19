@@ -80,21 +80,15 @@ const FormDocument: React.FC<{preview: boolean}>= ({preview}) => {
 };
 
   const handleFormSubmit = async() => {
-    // let isSubmissionPermitted = false
-    // formData.fields.map((field)=> {
-    //   const fieldPermitted = false
-    //   submitForm.data.map((formField) => if (formField.field_id === field.field_id && field.required === true && formField.value.length  != 0 ) then true)
-    // })
-    let isSubmissionPermitted = true;
+    let isSubmissionPermitted : boolean = true;
 
     for (const field of formData.fields) {
       const matchingField = submitForm.data.find(formField => formField.field_id === field.field_id);
+      console.log(matchingField);
       
       if (field.required === true) {
-        if (!matchingField || matchingField.value.length === 0) {
-          toast.error("Please Fill Up All the Mandatory fields Properly Before Submission")
+        if (!matchingField || !matchingField.value || matchingField.value.every(v => !v)) {
           isSubmissionPermitted = false;
-          break;
         }
       }
     }
@@ -106,6 +100,8 @@ const FormDocument: React.FC<{preview: boolean}>= ({preview}) => {
         status === 'edit' ? toast.success("Document Edited Successfully") : toast.success("Document Submitted Successfully")
       setPreviewKey(true)
       previewSubmission(submissionData) 
+    } else {
+      toast.error("Please Fill Up All the Mandatory fields Properly Before Submission")
     }
   }
 
